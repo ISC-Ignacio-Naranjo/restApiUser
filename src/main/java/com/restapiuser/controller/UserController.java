@@ -1,20 +1,19 @@
 package com.restapiuser.controller;
 
 
-import com.restapiuser.constants.UsersConstants;
 import com.restapiuser.entities.User;
+import com.restapiuser.model.LoginRequest;
+import com.restapiuser.model.UserMapper;
+import com.restapiuser.model.UserResponse;
 import com.restapiuser.model.UserRequest;
 import com.restapiuser.service.UserService;
-import com.restapiuser.util.ErrorResponse;
 import com.restapiuser.util.UserRegistrationException;
-import com.restapiuser.util.UsersUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/user")
@@ -23,28 +22,30 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody UserRequest userRequest){
+    @Autowired
+    UserMapper userMapper;
+
+    @PostMapping("/signup")
+    public ResponseEntity<UserResponse> signup(@RequestBody UserRequest signupRequest) {
         try {
-            User savedUser = userService.singUp(userRequest);
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+            return userService.signup(signupRequest);
         } catch (UserRegistrationException e) {
-            ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            return ResponseEntity.badRequest().body(new UserResponse(null, null, null,null, null, e.getMessage(), false));
         }
     }
+
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody(required = true) Map<String, String> requestMap){
-        try{
-            return userService.login(requestMap);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return UsersUtils.getResponseEntity(UsersConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<String> login(@RequestBody(required = true)LoginRequest loginRequest){
+        return userService.login(loginRequest);
+
     }
 
     @GetMapping("/users")
-    public List<User> getAllUsers() {
-        return userService.findUsers();
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
+        List<User> users = userService.getAllUsers();
+        List<UserResponse> userDTOs = users.stream()
+                .map(UserMapper::toDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(userDTOs);
     }
 }

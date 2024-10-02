@@ -1,16 +1,16 @@
 package com.restapiuser.service;
 import com.restapiuser.entities.User;
+import com.restapiuser.model.LoginRequest;
 import com.restapiuser.model.UserRequest;
+import com.restapiuser.model.UserResponse;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
-import java.util.Map;
 
 public interface UserService {
 
-    User singUp(UserRequest userRequest);
+    ResponseEntity<UserResponse> signup(UserRequest userRequest);
+    ResponseEntity<String> login(LoginRequest loginRequest);
 
-    ResponseEntity<String> login(Map<String, String> requestMap);
-
-    List<User> findUsers();
+    List<User> getAllUsers();
 }

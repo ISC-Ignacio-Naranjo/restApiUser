@@ -33,7 +33,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (request.getServletPath().matches("/user/login|user/forgonPassword|/user/signup")){
+        if (request.getServletPath().matches("/user/login|user/forgonPassword|/user/signup|/user/users|/h2-console")){
             filterChain.doFilter(request, response);
         }else {
             String authorizationHeader = request.getHeader("Authorization");
@@ -58,16 +58,5 @@ public class JwtFilter extends OncePerRequestFilter {
         }
     }
 
-    public Boolean isAdmin(){
-        return "admin".equalsIgnoreCase((String) claims.get("role"));
-    }
-
-    public Boolean isUser(){
-        return "user".equalsIgnoreCase((String) claims.get("role"));
-    }
-
-    public String getCurrentUser(){
-        return userName;
-    }
 
 }

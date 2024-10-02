@@ -33,4 +33,5 @@ import java.util.UUID;
         private Date lastLogin;
         private String token;
         private boolean isActive;
-}
+
+    }

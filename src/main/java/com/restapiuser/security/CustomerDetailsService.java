@@ -20,20 +20,27 @@ public class CustomerDetailsService implements UserDetailsService {
 
     private User userDetail;
 
+    @Autowired
+    private UserRepository userRepository;
+
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        log.info("Dentro de loadUserByUsername {}", userName);
+        log.info("inside of  loadUserByUsername {}", userName);
         userDetail = userDAO.findByEmail(userName);
         if (!Objects.isNull(userDetail)){
             return new org.springframework.security.core.userdetails.User(userDetail.getEmail(), userDetail.getPassword(), new ArrayList<>());
         }else {
-            throw  new UsernameNotFoundException("Usuario No Encontrado");
+            throw  new UsernameNotFoundException("User not found with name: " + userName);
         }
     }
 
-    public User getUserDetail(){
-        return userDetail;
+    public User getUserDetail(String email) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found with email: " + email);
+        }
+        return user;
     }
 
 }

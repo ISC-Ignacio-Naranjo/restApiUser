@@ -14,10 +14,11 @@ import java.util.Date;
 public class JwtTokenGenerator {
 
 
-  //  @Value("${app.jwtSecret}")
-    private String secretKey = "secret";
+    @Value("${app.jwtSecret}")
+    private String secretKey;
 
-    private long expirationTimeInMs = 3600000;
+    @Value("${app.expirationTimeInMs}")
+    private long expirationTimeInMs;
 
     public String generateAccessToken(User user) {
         Date now = new Date();
