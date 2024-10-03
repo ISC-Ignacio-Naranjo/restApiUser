@@ -1,7 +1,7 @@
-package com.restapiuser.security.jwt;
+package com.restapiuser.config.jwt;
 
 
-import com.restapiuser.security.CustomerDetailsService;
+import com.restapiuser.config.CustomerDetailsService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -33,7 +33,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (request.getServletPath().matches("/user/login|user/forgonPassword|/user/signup|/user/users|/h2-console")){
+        if (request.getServletPath().matches("/user/login|user/forgonPassword|/user/signup|/user/users|/h2-console|/swagger-ui|/v3/api-docs")){
             filterChain.doFilter(request, response);
         }else {
             String authorizationHeader = request.getHeader("Authorization");

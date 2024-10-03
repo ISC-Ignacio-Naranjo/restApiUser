@@ -22,7 +22,7 @@ public class DataLoader {
     public void loadData() {
         Resource resource = resourceLoader.getResource("classpath:data.sql");
         try (Connection connection = dataSource.getConnection()) {
-            ScriptUtils.executeSqlScript(connection, resource); // Corrige aquí
+            ScriptUtils.executeSqlScript(connection, resource);
         } catch (Exception e) {
             e.printStackTrace();
         }

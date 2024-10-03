@@ -1,4 +1,4 @@
-package com.restapiuser.security.jwt;
+package com.restapiuser.config.jwt;
 
 
 import io.jsonwebtoken.Claims;

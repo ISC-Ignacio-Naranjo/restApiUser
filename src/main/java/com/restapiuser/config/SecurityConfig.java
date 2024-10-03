@@ -1,7 +1,7 @@
-package com.restapiuser.security;
+package com.restapiuser.config;
 
 
-import com.restapiuser.security.jwt.JwtFilter;
+import com.restapiuser.config.jwt.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,17 +27,20 @@ public class SecurityConfig {
 
     @Bean
     protected SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+
         httpSecurity.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
                 .and()
                 .csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("user/login","/user/signup","/user/forgotPassword","user/users","/h2-console/**")
+                .requestMatchers("user/login","/user/signup","/user/forgotPassword","user/users","/h2-console/**","/swagger-ui/**","/v3/api-docs/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and().exceptionHandling()
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+
         httpSecurity.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();

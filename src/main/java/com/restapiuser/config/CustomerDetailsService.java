@@ -1,4 +1,4 @@
-package com.restapiuser.security;
+package com.restapiuser.config;
 import com.restapiuser.repository.UserRepository;
 import com.restapiuser.entities.User;
 import lombok.extern.slf4j.Slf4j;
